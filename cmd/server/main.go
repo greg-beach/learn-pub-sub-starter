@@ -60,6 +60,7 @@ func main() {
 
 		default:
 			fmt.Println("unknown command")
+			continue
 		}
 
 	}
