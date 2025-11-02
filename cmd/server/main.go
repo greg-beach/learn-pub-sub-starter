@@ -13,19 +13,31 @@ import (
 func main() {
 	connectionString := "amqp://guest:guest@localhost:5672/"
 
-	connection, err := amqp.Dial(connectionString)
+	conn, err := amqp.Dial(connectionString)
 	if err != nil {
 		fmt.Printf("Internal error: %v\n", err)
 		return
 	}
-	defer connection.Close()
+	defer conn.Close()
 
 	fmt.Println("Peril game server connect to RabbitMQ!")
 
-	publishCh, err := connection.Channel()
+	publishCh, err := conn.Channel()
 	if err != nil {
 		log.Fatalf("could not create channel: %v", err)
 	}
+
+	_, queue, err := pubsub.DeclareAndBind(
+		conn,
+		routing.ExchangePerilTopic,
+		"game_logs",
+		"game_logs.*",
+		pubsub.SimpleQueueDurable,
+	)
+	if err != nil {
+		log.Fatalf("could not subscribe to pause: %v", err)
+	}
+	fmt.Printf("Queue %v declared and bound!\n", queue.Name)
 
 	gamelogic.PrintServerHelp()
 
