@@ -53,7 +53,7 @@ func main() {
 
 			err = pubsub.PublishJSON(publishCh, routing.ExchangePerilDirect, routing.PauseKey, routing.PlayingState{IsPaused: true})
 			if err != nil {
-				log.Printf("could not publish time: %v", err)
+				log.Printf("could not publish pause: %v", err)
 			}
 			fmt.Println("pause message sent!")
 
@@ -62,7 +62,7 @@ func main() {
 
 			err = pubsub.PublishJSON(publishCh, routing.ExchangePerilDirect, routing.PauseKey, routing.PlayingState{IsPaused: false})
 			if err != nil {
-				log.Printf("could not publish time: %v", err)
+				log.Printf("could not publish resume: %v", err)
 			}
 			fmt.Println("resume message sent!")
 
