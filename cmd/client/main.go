@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/greg-beach/learn-pub-sub-starter/internal/gamelogic"
 	"github.com/greg-beach/learn-pub-sub-starter/internal/pubsub"
@@ -62,7 +63,7 @@ func main() {
 		routing.WarRecognitionsPrefix,
 		routing.WarRecognitionsPrefix+".*",
 		pubsub.SimpleQueueDurable,
-		handlerWar(gs),
+		handlerWar(gs, publishCh),
 	)
 	if err != nil {
 		log.Fatalf("could not subscribe: %v", err)
@@ -114,4 +115,18 @@ func main() {
 		}
 
 	}
+}
+
+func publishGameLog(publishCh *amqp.Channel, username, message string) error {
+	err := pubsub.PublishGob(
+		publishCh,
+		routing.ExchangePerilTopic,
+		routing.GameLogSlug+"."+username,
+		routing.GameLog{
+			CurrentTime: time.Now(),
+			Message:     message,
+			Username:    username,
+		},
+	)
+	return err
 }

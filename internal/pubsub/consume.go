@@ -99,7 +99,7 @@ func SubscribeJSON[T any](
 				msg.Nack(false, true)
 			}
 		}
-
 	}()
+
 	return nil
 }
