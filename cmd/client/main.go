@@ -118,7 +118,7 @@ func main() {
 }
 
 func publishGameLog(publishCh *amqp.Channel, username, message string) error {
-	err := pubsub.PublishGob(
+	return pubsub.PublishGob(
 		publishCh,
 		routing.ExchangePerilTopic,
 		routing.GameLogSlug+"."+username,
@@ -128,5 +128,4 @@ func publishGameLog(publishCh *amqp.Channel, username, message string) error {
 			Username:    username,
 		},
 	)
-	return err
 }
