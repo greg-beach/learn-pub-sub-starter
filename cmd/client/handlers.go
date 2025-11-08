@@ -85,3 +85,4 @@ func handlerWar(gs *gamelogic.GameState, publishCh *amqp.Channel) func(dw gamelo
 		return pubsub.NackDiscard
 	}
 }
+
